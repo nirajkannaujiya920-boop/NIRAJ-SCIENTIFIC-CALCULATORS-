@@ -560,10 +560,17 @@ export default function App() {
       </main>
 
       {/* Professional Footer */}
-      <footer className="px-6 py-4 text-center border-t border-slate-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 mb-16">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Developed by</p>
-        <p className="text-xs font-black text-blue-600 dark:text-blue-400">Niraj Kumar Kannaujiya</p>
-        <p className="text-[9px] text-slate-500 mt-1 tracking-tight">Queen’s College Student • © 2026</p>
+      <footer className="px-6 py-6 text-center bg-slate-50 dark:bg-zinc-950 border-t border-slate-100 dark:border-zinc-900 mb-16">
+        <div className="max-w-xs mx-auto p-4 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 relative overflow-hidden group hover:border-orange-200 dark:hover:border-orange-900/50 transition-all duration-300">
+          <div className="absolute top-0 left-0 w-1 h-full bg-orange-500" />
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Developed by</p>
+          <p className="text-base font-black text-slate-800 dark:text-zinc-100 mb-1 tracking-tight">Niraj Kumar Kannaujiya</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 dark:bg-orange-500/10 rounded-full border border-orange-100 dark:border-orange-500/20">
+            <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
+            <p className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">Queen’s College Student</p>
+          </div>
+          <p className="text-[9px] text-slate-400 mt-3 font-mono">© 2026 • All Rights Reserved</p>
+        </div>
       </footer>
 
       {/* Navigation Footer */}
@@ -798,14 +805,14 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
       const transcript = event.results[0][0].transcript;
       let processed = transcript
         .toLowerCase()
-        .replace(/प्लस|जोड़|plus/g, '+')
-        .replace(/माइनस|घटाव|minus/g, '−')
-        .replace(/गुणा|इनटू|गुना|times|multiplied by/g, '×')
-        .replace(/भाग|डिवाइड|divided by/g, '÷')
-        .replace(/पॉइंट|बिंदु|point/g, '.')
-        .replace(/बराबर|इक्वल|equal/g, '=')
-        .replace(/ब्रैकेट|कोष्ठक|bracket/g, '(')
-        .replace(/ब्रैकेट बंद|कोष्ठक बंद|bracket close/g, ')')
+        .replace(/प्लस|जोड़|plus|add/g, '+')
+        .replace(/माइनस|घटाव|minus|subtract/g, '−')
+        .replace(/गुणा|इनटू|गुना|times|multiplied by|multiply|multiple|into|x|multiplication/g, '×')
+        .replace(/भाग|डिवाइड|divided by|divide|division/g, '÷')
+        .replace(/पॉइंट|बिंदु|point|decimal/g, '.')
+        .replace(/बराबर|इक्वल|equal|equals/g, '=')
+        .replace(/ब्रैकेट|कोष्ठक|bracket|open bracket/g, '(')
+        .replace(/ब्रैकेट बंद|कोष्ठक बंद|bracket close|close bracket/g, ')')
         .replace(/स्क्वायर|वर्ग|square/g, '^2')
         .replace(/क्यूब|घन|cube/g, '^3')
         .replace(/पावर|घात|power/g, '^')
@@ -815,7 +822,7 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
         .replace(/कॉस|cos/g, 'cos(')
         .replace(/टैन|tan/g, 'tan(')
         .replace(/लॉग|log/g, 'log(')
-        .replace(/प्रतिशत|परसेंट|percent/g, '%')
+        .replace(/प्रतिशत|परसेंट|percent|percentage/g, '%')
         .replace(/एक|one/g, '1')
         .replace(/दो|two/g, '2')
         .replace(/तीन|three/g, '3')
@@ -825,8 +832,10 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
         .replace(/सात|seven/g, '7')
         .replace(/आठ|eight/g, '8')
         .replace(/नौ|nine/g, '9')
-        .replace(/जीरो|शून्य|zero/g, '0')
-        .replace(/[^0-9+\-×÷.()^π%√sincoatlg]/g, '');
+        .replace(/जीरो|शून्य|शुन्य|zero|null|nought/g, '0')
+        .replace(/दस|ten/g, '10')
+        .replace(/\s+/g, '') // Remove spaces
+        .replace(/[^0-9+\-−×÷.()^π%√sincoatlg!e]/g, ''); // Keep valid chars
 
       if (processed.includes('=')) {
         const parts = processed.split('=');
@@ -936,12 +945,23 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
       {/* Display Area */}
       <div className="flex-1 flex flex-col justify-end p-6 text-right min-h-[25vh]">
         <div className="flex justify-between items-start mb-4">
-          <button 
-            onClick={startVoice}
-            className={`p-4 rounded-full transition-all ${isListening ? 'bg-red-500 text-white animate-pulse scale-110 shadow-lg shadow-red-500/50' : 'bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}
-          >
-            <Mic size={28} />
-          </button>
+          <div className="relative">
+            <button 
+              onClick={startVoice}
+              className={`p-4 rounded-full transition-all ${isListening ? 'bg-red-500 text-white animate-pulse scale-110 shadow-lg shadow-red-500/50' : 'bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}
+            >
+              <Mic size={28} />
+            </button>
+            {isListening && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-50"
+              >
+                बोलें (Speak Now...)
+              </motion.div>
+            )}
+          </div>
           <div className="flex flex-col items-end max-w-[80%]">
             <div className="text-slate-400 dark:text-zinc-500 text-2xl font-medium overflow-hidden whitespace-nowrap mb-2 opacity-70">
               {lastExpression ? lastExpression + ' =' : ' '}
@@ -953,14 +973,17 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
             )}
           </div>
         </div>
-        <div className="relative flex items-center justify-end">
-          <div className="text-7xl font-light text-slate-900 dark:text-white overflow-hidden whitespace-nowrap tracking-tighter">
+        <div className="relative flex items-center justify-end overflow-hidden">
+          <div className={`font-light text-slate-900 dark:text-white overflow-hidden whitespace-nowrap tracking-tighter transition-all duration-200 ${
+            (expression || result || '0').length > 10 ? 'text-4xl' : 
+            (expression || result || '0').length > 7 ? 'text-5xl' : 'text-7xl'
+          }`}>
             {expression || result || '0'}
           </div>
           <motion.div 
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 0.8, repeat: Infinity }}
-            className="w-1 h-14 bg-orange-500 ml-1 rounded-full"
+            className="w-1 h-14 bg-orange-500 ml-1 rounded-full flex-shrink-0"
           />
         </div>
       </div>
@@ -2944,9 +2967,15 @@ function LiveTracker() {
     currentSpeed: 0,
     startTime: 0
   });
-  const [lastPos, setLastPos] = useState<GeolocationCoordinates | null>(null);
+  const lastPosRef = React.useRef<GeolocationCoordinates | null>(null);
+  const statsRef = React.useRef(stats);
   const watchId = React.useRef<number | null>(null);
   const timerId = React.useRef<any>(null);
+
+  // Keep statsRef in sync
+  useEffect(() => {
+    statsRef.current = stats;
+  }, [stats]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371; // Earth radius in km
@@ -2965,8 +2994,13 @@ function LiveTracker() {
       return;
     }
 
+    // Request permission explicitly if needed (some browsers)
+    navigator.geolocation.getCurrentPosition(() => {}, () => {});
+
     setIsTracking(true);
-    setStats({ distance: 0, time: 0, avgSpeed: 0, maxSpeed: 0, currentSpeed: 0, startTime: Date.now() });
+    const now = Date.now();
+    setStats({ distance: 0, time: 0, avgSpeed: 0, maxSpeed: 0, currentSpeed: 0, startTime: now });
+    lastPosRef.current = null;
     
     timerId.current = setInterval(() => {
       setStats(prev => ({ ...prev, time: Math.floor((Date.now() - prev.startTime) / 1000) }));
@@ -2975,28 +3009,53 @@ function LiveTracker() {
     watchId.current = navigator.geolocation.watchPosition(
       (position) => {
         const coords = position.coords;
-        const currentSpeed = coords.speed ? coords.speed * 3.6 : 0; // m/s to km/h
+        const now = Date.now();
         
-        if (lastPos) {
-          const d = calculateDistance(lastPos.latitude, lastPos.longitude, coords.latitude, coords.longitude);
-          // Update stats even for very small movements
-          setStats(prev => {
-            const newDist = prev.distance + d;
-            return {
-              ...prev,
-              distance: newDist,
-              currentSpeed: currentSpeed,
-              maxSpeed: Math.max(prev.maxSpeed, currentSpeed),
-              avgSpeed: prev.time > 0 ? (newDist / (prev.time / 3600)) : 0
-            };
-          });
-        } else {
-          setStats(prev => ({ ...prev, currentSpeed }));
+        // Calculate manual speed if coords.speed is null
+        let currentSpeed = coords.speed ? coords.speed * 3.6 : 0; // km/h
+        
+        if (lastPosRef.current) {
+          const d = calculateDistance(lastPosRef.current.latitude, lastPosRef.current.longitude, coords.latitude, coords.longitude);
+          const timeDiff = (now - (lastPosRef.current.timestamp || now)) / 1000; // seconds
+          
+          if (currentSpeed === 0 && d > 0 && timeDiff > 0) {
+            currentSpeed = (d / (timeDiff / 3600)); // manual km/h
+          }
+
+          // Relaxed filtering for better real-time response
+          // 1. Accuracy check (up to 50m is okay for general tracking)
+          // 2. Movement threshold (1 meter = 0.001 km)
+          const isMoving = d > 0.001 && coords.accuracy < 50;
+
+          if (isMoving) {
+            setStats(prev => {
+              const newDist = prev.distance + d;
+              const timeInHours = (now - prev.startTime) / 3600000;
+              return {
+                ...prev,
+                distance: newDist,
+                currentSpeed: currentSpeed,
+                maxSpeed: Math.max(prev.maxSpeed, currentSpeed),
+                avgSpeed: timeInHours > 0 ? (newDist / timeInHours) : 0
+              };
+            });
+          } else {
+            setStats(prev => ({ 
+              ...prev, 
+              currentSpeed: currentSpeed > 0.5 ? currentSpeed : 0 
+            }));
+          }
         }
-        setLastPos(coords);
+        
+        // Store timestamp for manual speed calculation
+        (coords as any).timestamp = now;
+        lastPosRef.current = coords;
       },
-      (err) => console.error(err),
-      { enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 }
+      (err) => {
+        console.error("Geolocation error:", err);
+        if (err.code === 1) alert("Please allow location access to use the tracker.");
+      },
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
     );
   };
 
@@ -3004,7 +3063,8 @@ function LiveTracker() {
     setIsTracking(false);
     if (watchId.current !== null) navigator.geolocation.clearWatch(watchId.current);
     if (timerId.current) clearInterval(timerId.current);
-    setLastPos(null);
+    lastPosRef.current = null;
+    watchId.current = null;
   };
 
   const formatDistance = (km: number) => {
@@ -3040,8 +3100,13 @@ function LiveTracker() {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center col-span-2">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">वर्तमान गति (Current Speed)</div>
-          <div className="text-4xl font-black text-blue-600">{stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span></div>
+          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center justify-center gap-2">
+            वर्तमान गति (Current Speed)
+            {isTracking && <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />}
+          </div>
+          <div className={`text-4xl font-black transition-colors ${isTracking ? 'text-blue-600' : 'text-slate-300'}`}>
+            {stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span>
+          </div>
         </div>
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
           <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">कुल दूरी (Distance)</div>
@@ -3061,18 +3126,24 @@ function LiveTracker() {
         </div>
       </div>
 
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-center pt-4 flex-col items-center gap-3">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full border border-slate-200 dark:border-zinc-700">
+          <span className={`w-2 h-2 rounded-full ${isTracking ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+          <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">
+            {isTracking ? 'GPS सक्रिय है (Active)' : 'GPS बंद है (Inactive)'}
+          </span>
+        </div>
         {!isTracking ? (
           <button 
             onClick={startTracking}
-            className="flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/30 active:scale-95 transition-all"
+            className="flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/30 active:scale-95 transition-all w-full sm:w-auto justify-center"
           >
             <Play size={20} fill="currentColor" /> ट्रैकिंग शुरू करें (Start)
           </button>
         ) : (
           <button 
             onClick={stopTracking}
-            className="flex items-center gap-3 bg-red-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-red-500/30 active:scale-95 transition-all"
+            className="flex items-center gap-3 bg-red-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-red-500/30 active:scale-95 transition-all w-full sm:w-auto justify-center"
           >
             <Square size={20} fill="currentColor" /> ट्रैकिंग रोकें (Stop)
           </button>
@@ -3200,12 +3271,14 @@ function GraphPlotter() {
 function StepCounter() {
   const [steps, setSteps] = useState(0);
   const [isCounting, setIsCounting] = useState(false);
-  const [lastAccel, setLastAccel] = useState(0);
+  const lastAccelRef = React.useRef(0);
+  const lastStepTimeRef = React.useRef(0);
+  const [permissionGranted, setPermissionGranted] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (isCounting) {
       const handleMotion = (event: DeviceMotionEvent) => {
-        const accel = event.accelerationIncludingGravity;
+        const accel = event.accelerationIncludingGravity || event.acceleration;
         if (!accel) return;
         
         const magnitude = Math.sqrt(
@@ -3214,17 +3287,50 @@ function StepCounter() {
           (accel.z || 0) ** 2
         );
 
-        const delta = Math.abs(magnitude - lastAccel);
-        if (delta > 12) { // Threshold for a step
-          setSteps(prev => prev + 1);
+        if (lastAccelRef.current === 0) {
+          lastAccelRef.current = magnitude;
+          return;
         }
-        setLastAccel(magnitude);
+
+        const delta = Math.abs(magnitude - lastAccelRef.current);
+        const now = Date.now();
+
+        // Lower threshold for better sensitivity (9.0 instead of 11)
+        // Debounce to 250ms for faster steps
+        if (delta > 9.0 && (now - lastStepTimeRef.current) > 250) { 
+          setSteps(prev => prev + 1);
+          lastStepTimeRef.current = now;
+        }
+        lastAccelRef.current = magnitude;
       };
 
-      window.addEventListener('devicemotion', handleMotion);
+      const startListening = () => {
+        window.addEventListener('devicemotion', handleMotion);
+        setPermissionGranted(true);
+      };
+
+      // Request permission for iOS 13+
+      if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
+        (DeviceMotionEvent as any).requestPermission()
+          .then((permissionState: string) => {
+            if (permissionState === 'granted') {
+              startListening();
+            } else {
+              setPermissionGranted(false);
+              alert("Motion permission denied. Step counter won't work.");
+            }
+          })
+          .catch((err: any) => {
+            console.error(err);
+            setPermissionGranted(false);
+          });
+      } else {
+        startListening();
+      }
+
       return () => window.removeEventListener('devicemotion', handleMotion);
     }
-  }, [isCounting, lastAccel]);
+  }, [isCounting]);
 
   return (
     <div className="space-y-6">
@@ -3238,9 +3344,28 @@ function StepCounter() {
         <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 p-12 rounded-full border-8 border-orange-500/20 shadow-inner flex flex-col items-center justify-center mx-auto w-64 h-64">
-        <div className="text-5xl font-black text-orange-500">{steps}</div>
+      <div className="relative flex justify-center">
+        {isCounting && (
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20 z-10">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-[10px] font-black text-green-600 dark:text-green-400 uppercase tracking-widest">
+              Live Activity
+            </span>
+          </div>
+        )}
+        <div className={`bg-white dark:bg-zinc-900 p-12 rounded-full border-8 shadow-inner flex flex-col items-center justify-center w-64 h-64 transition-all duration-500 ${isCounting ? 'border-orange-500 shadow-orange-500/20 scale-105' : 'border-orange-500/20 shadow-none scale-100'}`}>
+        <div className={`text-5xl font-black transition-colors ${isCounting ? 'text-orange-500' : 'text-slate-300'}`}>{steps}</div>
         <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">कदम (Steps)</div>
+        {isCounting && (
+          <motion.div 
+            animate={{ y: [0, -5, 0] }} 
+            transition={{ repeat: Infinity, duration: 1 }}
+            className="mt-2 text-orange-500"
+          >
+            <Footprints size={16} />
+          </motion.div>
+        )}
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -3370,19 +3495,31 @@ function RandomTools() {
           <div className="text-4xl font-mono font-black text-purple-600">
             {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
           </div>
-          <div className="w-full flex gap-2">
-            <input 
-              type="number" 
-              placeholder="Min"
-              className="flex-1 p-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl outline-none text-center text-sm"
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                if (!isNaN(val)) setTimer(val * 60);
-              }}
-            />
-            <div className="flex gap-1">
-              {[1, 5, 10].map(m => (
-                <button key={m} onClick={() => setTimer(m * 60)} className="px-3 py-1 bg-slate-100 dark:bg-zinc-800 rounded-lg text-xs font-bold text-slate-500">{m}m</button>
+          <div className="w-full space-y-2">
+            <div className="flex gap-2">
+              <input 
+                type="number" 
+                id="customTimerInput"
+                placeholder="मिनट (Min)"
+                className="flex-1 p-3 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl outline-none text-center text-sm font-bold focus:ring-2 focus:ring-purple-500"
+              />
+              <button 
+                onClick={() => {
+                  const input = document.getElementById('customTimerInput') as HTMLInputElement;
+                  const val = parseInt(input.value);
+                  if (!isNaN(val) && val > 0) {
+                    setTimer(val * 60);
+                    setIsTimerRunning(false);
+                  }
+                }}
+                className="px-4 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl font-bold text-xs active:scale-95 transition-all"
+              >
+                सेट (Set)
+              </button>
+            </div>
+            <div className="flex justify-center gap-2">
+              {[1, 5, 10, 15, 30].map(m => (
+                <button key={m} onClick={() => { setTimer(m * 60); setIsTimerRunning(false); }} className="px-3 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-lg text-[10px] font-bold text-slate-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">{m}m</button>
               ))}
             </div>
           </div>
@@ -3487,13 +3624,16 @@ function AboutPage() {
       </div>
 
       <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-slate-100 dark:border-zinc-800 shadow-sm space-y-6">
-        <div className="space-y-2">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Developer</h3>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-xl">NK</div>
+        <div className="space-y-4">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Developer (विकासकर्ता)</h3>
+          <div className="p-5 bg-slate-50 dark:bg-zinc-800/50 rounded-3xl border border-slate-100 dark:border-zinc-800 flex items-center gap-5">
+            <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-orange-500/20">NK</div>
             <div>
-              <div className="font-black text-slate-800 dark:text-zinc-100 text-lg">Niraj Kumar Kannaujiya</div>
-              <div className="text-sm text-blue-600 font-bold">Queen’s College Student</div>
+              <div className="font-black text-slate-800 dark:text-zinc-100 text-xl tracking-tight">Niraj Kumar Kannaujiya</div>
+              <div className="inline-flex items-center gap-2 mt-1 px-3 py-0.5 bg-orange-100 dark:bg-orange-500/20 rounded-full">
+                <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase">Queen’s College Student</span>
+              </div>
             </div>
           </div>
         </div>
