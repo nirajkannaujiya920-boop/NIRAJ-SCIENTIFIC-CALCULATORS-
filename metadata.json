@@ -1,0 +1,5 @@
+{
+  "name": "NIRAJ SCIENTIFIC CALCULATOR",
+  "description": "NIRAJ Scientific Calculator – एक संपूर्ण स्मार्ट अध्ययन एवं गणना समाधान। इसमें शक्तिशाली वैज्ञानिक कैलकुलेटर, 1000+ सूत्र, लाइव ट्रैकर, ग्राफ प्लॉटिंग, स्टेप काउंटर और कई महत्वपूर्ण टूल्स शामिल हैं।",
+  "requestFramePermissions": ["geolocation"]
+}
