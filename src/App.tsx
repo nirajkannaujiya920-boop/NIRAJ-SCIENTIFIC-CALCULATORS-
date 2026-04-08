@@ -369,7 +369,7 @@ export default function App() {
                 <span className="text-zinc-600">•</span>
                 <span>Fast</span>
                 <span className="text-zinc-600">•</span>
-                <span>Offline ⚡</span>
+                <span>Online ⚡</span>
               </div>
             </motion.div>
 
@@ -3016,40 +3016,42 @@ function LiveTracker() {
         
         if (lastPosRef.current) {
           const d = calculateDistance(lastPosRef.current.latitude, lastPosRef.current.longitude, coords.latitude, coords.longitude);
-          const timeDiff = (now - (lastPosRef.current.timestamp || now)) / 1000; // seconds
+          const timeDiff = (now - (lastPosRef.current as any).timestamp) / 1000; // seconds
           
           if (currentSpeed === 0 && d > 0 && timeDiff > 0) {
             currentSpeed = (d / (timeDiff / 3600)); // manual km/h
           }
 
           // Relaxed filtering for better real-time response
-          // 1. Accuracy check (up to 50m is okay for general tracking)
-          // 2. Movement threshold (1 meter = 0.001 km)
-          const isMoving = d > 0.001 && coords.accuracy < 50;
+          // 1. Accuracy check (up to 150m is okay for general tracking)
+          // 2. Movement threshold (0.2 meter = 0.0002 km)
+          const isMoving = d > 0.0002 && coords.accuracy < 150;
 
-          if (isMoving) {
-            setStats(prev => {
-              const newDist = prev.distance + d;
-              const timeInHours = (now - prev.startTime) / 3600000;
-              return {
-                ...prev,
-                distance: newDist,
-                currentSpeed: currentSpeed,
-                maxSpeed: Math.max(prev.maxSpeed, currentSpeed),
-                avgSpeed: timeInHours > 0 ? (newDist / timeInHours) : 0
-              };
-            });
-          } else {
-            setStats(prev => ({ 
-              ...prev, 
-              currentSpeed: currentSpeed > 0.5 ? currentSpeed : 0 
-            }));
-          }
+          setStats(prev => {
+            const newDist = isMoving ? prev.distance + d : prev.distance;
+            const timeInHours = (now - prev.startTime) / 3600000;
+            const newMaxSpeed = Math.max(prev.maxSpeed, currentSpeed);
+            const newAvgSpeed = timeInHours > 0 ? (newDist / timeInHours) : 0;
+            
+            return {
+              ...prev,
+              distance: newDist,
+              currentSpeed: currentSpeed > 0.3 ? currentSpeed : 0,
+              maxSpeed: newMaxSpeed,
+              avgSpeed: newAvgSpeed
+            };
+          });
+        } else {
+          setStats(prev => ({ ...prev, currentSpeed: currentSpeed > 0.3 ? currentSpeed : 0 }));
         }
         
-        // Store timestamp for manual speed calculation
-        (coords as any).timestamp = now;
-        lastPosRef.current = coords;
+        // Store timestamp and coords in a new object to avoid read-only issues
+        lastPosRef.current = {
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          accuracy: coords.accuracy,
+          timestamp: now
+        } as any;
       },
       (err) => {
         console.error("Geolocation error:", err);
@@ -3105,7 +3107,13 @@ function LiveTracker() {
             {isTracking && <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />}
           </div>
           <div className={`text-4xl font-black transition-colors ${isTracking ? 'text-blue-600' : 'text-slate-300'}`}>
-            {stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span>
+            {isTracking && !lastPosRef.current ? (
+              <span className="text-sm animate-pulse text-orange-500">GPS सिग्नल खोज रहे हैं... (Searching...)</span>
+            ) : (
+              <>
+                {stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span>
+              </>
+            )}
           </div>
         </div>
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
@@ -3127,12 +3135,30 @@ function LiveTracker() {
       </div>
 
       <div className="flex justify-center pt-4 flex-col items-center gap-3">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full border border-slate-200 dark:border-zinc-700">
-          <span className={`w-2 h-2 rounded-full ${isTracking ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
-          <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">
-            {isTracking ? 'GPS सक्रिय है (Active)' : 'GPS बंद है (Inactive)'}
-          </span>
-        </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full border border-slate-200 dark:border-zinc-700">
+            <span className={`w-2 h-2 rounded-full ${isTracking ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+            <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">
+              {isTracking ? 'GPS सक्रिय है (Active)' : 'GPS बंद है (Inactive)'}
+            </span>
+            {isTracking && lastPosRef.current && (
+              <div className="flex items-center gap-1 ml-2 border-l border-slate-300 dark:border-zinc-700 pl-2">
+                <span className="text-[8px] font-bold text-slate-400">सिग्नल:</span>
+                <div className="flex gap-0.5">
+                  {[1, 2, 3, 4].map(i => (
+                    <div 
+                      key={i} 
+                      className={`w-1 rounded-t-sm ${
+                        (lastPosRef.current as any).accuracy < (200 / i) 
+                          ? 'bg-green-500' 
+                          : 'bg-slate-200 dark:bg-zinc-700'
+                      }`} 
+                      style={{ height: `${i * 3}px` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         {!isTracking ? (
           <button 
             onClick={startTracking}
@@ -3648,7 +3674,7 @@ function AboutPage() {
         <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 grid grid-cols-2 gap-4">
           <div className="text-center">
             <div className="text-xl font-black text-slate-800 dark:text-zinc-100">100%</div>
-            <div className="text-[10px] font-bold text-slate-400 uppercase">Offline Ready</div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase">Online Ready</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-black text-slate-800 dark:text-zinc-100">Free</div>
