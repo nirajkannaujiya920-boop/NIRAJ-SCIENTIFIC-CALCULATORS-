@@ -242,32 +242,6 @@ const CONVERTER_DATA = {
   force: { N: 1, kN: 1000, lbf: 4.44822, dyn: 1e-5 }
 };
 
-function AdBanner() {
-  useEffect(() => {
-    const container = document.getElementById('ad-banner-container');
-    if (container && !container.hasChildNodes()) {
-      const atScript = document.createElement('script');
-      atScript.type = 'text/javascript';
-      atScript.innerHTML = `
-        atOptions = {
-          'key' : '09f1d8809bf48bc17265db3f96916867',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      `;
-      container.appendChild(atScript);
-
-      const invokeScript = document.createElement('script');
-      invokeScript.type = 'text/javascript';
-      invokeScript.src = "//www.highperformanceformat.com/09f1d8809bf48bc17265db3f96916867/invoke.js";
-      container.appendChild(invokeScript);
-    }
-  }, []);
-
-  return <div id="ad-banner-container" className="flex justify-center items-center w-full h-full" />;
-}
 
 export default function App() {
   const [page, setPage] = useState<Page>('home');
@@ -415,11 +389,6 @@ export default function App() {
       </AnimatePresence>
 
       <div className={`w-full ${page === 'calculator' ? '' : 'max-w-md'} mx-auto min-h-screen flex flex-col relative`}>
-        {/* Ad Placeholder */}
-        <div className="bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 h-14 flex flex-col justify-center items-center overflow-hidden">
-          <div className="text-[8px] text-slate-400 uppercase tracking-[0.2em] mb-1">Sponsored Advertisement</div>
-          <AdBanner />
-        </div>
 
         {/* Header */}
         {page !== 'calculator' && (
@@ -430,10 +399,16 @@ export default function App() {
                   <ChevronLeft size={24} />
                 </button>
               )}
-              <h1 className="text-xl font-bold flex items-center gap-2">
-                <CalcIcon size={24} className="bg-white/20 p-1 rounded-lg" />
-                NIRAJ SCIENTIFIC CALCULATOR
-              </h1>
+              <div>
+                <h1 className="text-xl font-bold flex items-center gap-2">
+                  <CalcIcon size={24} className="bg-white/20 p-1 rounded-lg" />
+                  NIRAJ SCIENTIFIC CALCULATOR
+                </h1>
+                <div className="flex items-center gap-1 ml-9">
+                  <span className="w-1 h-1 bg-green-300 rounded-full" />
+                  <span className="text-[8px] font-bold uppercase tracking-widest opacity-80">Offline Ready</span>
+                </div>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               {isOffline && (
@@ -1144,7 +1119,10 @@ function Converter({ category, setCategory, page, setPage, isDark, setIsDark }: 
             <RefreshCw size={24} />
           </div>
           <div className="flex-1">
-            <label className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest block mb-1">Category (श्रेणी)</label>
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest block mb-1">Category (श्रेणी)</label>
+              <span className="text-[8px] font-bold text-green-500 uppercase border border-green-500/30 px-2 py-0.5 rounded-full">Offline Ready</span>
+            </div>
             <select 
               value={category}
               onChange={(e) => setCategory(e.target.value as any)}
@@ -2180,16 +2158,9 @@ function PrivacyPolicy() {
       </section>
 
       <section className="space-y-2">
-        <h3 className="text-lg font-bold text-slate-800 dark:text-zinc-200">4. Advertisements</h3>
+        <h3 className="text-lg font-bold text-slate-800 dark:text-zinc-200">4. Contact Us</h3>
         <p className="text-sm leading-relaxed">
-          We may display advertisements from third-party networks. These networks may use cookies or similar technologies to serve personalized ads. Please refer to their respective privacy policies for more information.
-        </p>
-      </section>
-
-      <section className="space-y-2">
-        <h3 className="text-lg font-bold text-slate-800 dark:text-zinc-200">5. Contact Us</h3>
-        <p className="text-sm leading-relaxed">
-          If you have any questions about this Privacy Policy, please contact us at: <strong>mahaveerprasad9125425127@gmail.com</strong>
+          If you have any questions about this Privacy Policy, please contact us at: <strong>nirajkannaujiya224@gmail.com</strong>
         </p>
       </section>
 
@@ -3022,10 +2993,11 @@ function LiveTracker() {
             currentSpeed = (d / (timeDiff / 3600)); // manual km/h
           }
 
-          // Relaxed filtering for better real-time response
+          // Filtering to avoid GPS jitter when stationary
           // 1. Accuracy check (up to 150m is okay for general tracking)
-          // 2. Movement threshold (0.2 meter = 0.0002 km)
-          const isMoving = d > 0.0002 && coords.accuracy < 150;
+          // 2. Movement threshold (3 meters = 0.003 km) to avoid jitter on table
+          // 3. Speed threshold (must be > 0.5 km/h to be considered moving)
+          const isMoving = d > 0.003 && coords.accuracy < 150 && currentSpeed > 0.5;
 
           setStats(prev => {
             const newDist = isMoving ? prev.distance + d : prev.distance;
@@ -3050,6 +3022,8 @@ function LiveTracker() {
           latitude: coords.latitude,
           longitude: coords.longitude,
           accuracy: coords.accuracy,
+          altitude: coords.altitude,
+          heading: coords.heading,
           timestamp: now
         } as any;
       },
@@ -3057,7 +3031,7 @@ function LiveTracker() {
         console.error("Geolocation error:", err);
         if (err.code === 1) alert("Please allow location access to use the tracker.");
       },
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 }
     );
   };
 
@@ -3070,6 +3044,7 @@ function LiveTracker() {
   };
 
   const formatDistance = (km: number) => {
+    if (km === 0) return '0.0 m';
     if (km < 0.001) { // Less than 1 meter
       const cm = km * 100000;
       return `${cm.toFixed(1)} cm`;
@@ -3109,6 +3084,8 @@ function LiveTracker() {
           <div className={`text-4xl font-black transition-colors ${isTracking ? 'text-blue-600' : 'text-slate-300'}`}>
             {isTracking && !lastPosRef.current ? (
               <span className="text-sm animate-pulse text-orange-500">GPS सिग्नल खोज रहे हैं... (Searching...)</span>
+            ) : isTracking && stats.currentSpeed <= 0.5 ? (
+              <span className="text-sm text-slate-400">विराम अवस्था (Stationary)</span>
             ) : (
               <>
                 {stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span>
@@ -3132,6 +3109,28 @@ function LiveTracker() {
           <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">अधिकतम गति (Max Speed)</div>
           <div className="text-2xl font-black text-blue-600">{stats.maxSpeed.toFixed(1)} <span className="text-xs">km/h</span></div>
         </div>
+        {isTracking && lastPosRef.current && (
+          <div className="bg-slate-50 dark:bg-zinc-800/50 p-3 rounded-xl border border-slate-100 dark:border-zinc-800 text-center col-span-2 flex justify-around items-center">
+            <div className="flex flex-col">
+              <span className="text-[8px] font-bold text-slate-400 uppercase">सटीकता (Accuracy)</span>
+              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">±{(lastPosRef.current as any).accuracy.toFixed(0)}m</span>
+            </div>
+            <div className="w-px h-6 bg-slate-200 dark:bg-zinc-700" />
+            <div className="flex flex-col">
+              <span className="text-[8px] font-bold text-slate-400 uppercase">ऊंचाई (Altitude)</span>
+              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">
+                {(lastPosRef.current as any).altitude ? (lastPosRef.current as any).altitude.toFixed(0) + 'm' : '--'}
+              </span>
+            </div>
+            <div className="w-px h-6 bg-slate-200 dark:bg-zinc-700" />
+            <div className="flex flex-col">
+              <span className="text-[8px] font-bold text-slate-400 uppercase">दिशा (Heading)</span>
+              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">
+                {(lastPosRef.current as any).heading ? (lastPosRef.current as any).heading.toFixed(0) + '°' : '--'}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-center pt-4 flex-col items-center gap-3">
@@ -3674,12 +3673,21 @@ function AboutPage() {
         <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 grid grid-cols-2 gap-4">
           <div className="text-center">
             <div className="text-xl font-black text-slate-800 dark:text-zinc-100">100%</div>
-            <div className="text-[10px] font-bold text-slate-400 uppercase">Online Ready</div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase">Offline Ready</div>
           </div>
           <div className="text-center">
-            <div className="text-xl font-black text-slate-800 dark:text-zinc-100">Free</div>
-            <div className="text-[10px] font-bold text-slate-400 uppercase">Ad Supported</div>
+            <div className="text-xl font-black text-slate-800 dark:text-zinc-100">100%</div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase">Ad Free</div>
           </div>
+        </div>
+
+        <div className="pt-4 text-center">
+          <button 
+            onClick={() => window.open('/privacy.html', '_blank')}
+            className="text-[10px] font-bold text-blue-500 uppercase tracking-widest hover:underline"
+          >
+            Privacy Policy (गोपनीयता नीति)
+          </button>
         </div>
       </div>
 
