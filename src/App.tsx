@@ -409,7 +409,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className={`w-full ${page === 'calculator' || page === 'converter' ? 'h-screen overflow-hidden' : 'max-w-xl min-h-screen pb-32'} mx-auto flex flex-col relative`}>
+      <div className={`w-full ${page === 'calculator' || page === 'converter' ? 'h-[100dvh] overflow-y-auto scrollbar-hide' : 'max-w-xl min-h-screen pb-32'} mx-auto flex flex-col relative`}>
         {/* Modern Header */}
         {page !== 'calculator' && (
           <header className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-300 ${isDark ? 'bg-zinc-950/80 border-zinc-800' : 'bg-white/80 border-slate-200'} p-4 flex justify-between items-center`}>
@@ -885,9 +885,9 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
   ];
 
   return (
-    <div className="flex flex-col flex-1 h-[100dvh] w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white relative overflow-hidden">
+    <div className="flex flex-col flex-1 min-h-[100dvh] w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white relative">
       {/* Modern Consistent Header */}
-      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-300 ${isDark ? 'bg-zinc-950/80 border-zinc-800' : 'bg-white/80 border-slate-200'} p-4 flex justify-between items-center`}>
+      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-300 ${isDark ? 'bg-zinc-950/80 border-zinc-800' : 'bg-white/80 border-slate-200'} p-3 flex justify-between items-center`}>
         <div className="flex items-center gap-4">
           <button onClick={() => setPage('home')} className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition-all active:scale-90">
             <ChevronLeft size={24} className="text-slate-600 dark:text-zinc-400" />
@@ -957,14 +957,14 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
       </div>
 
       {/* Display Area */}
-      <div className="flex-1 flex flex-col justify-end p-4 sm:p-6 text-right min-h-[20vh] sm:min-h-[25vh]">
-        <div className="flex justify-between items-start mb-4">
+      <div className="flex-1 flex flex-col justify-end p-4 sm:p-4 text-right min-h-[12vh] sm:min-h-[15vh]">
+        <div className="flex justify-between items-end mb-2">
           <div className="relative">
             <button 
               onClick={startVoice}
-              className={`p-4 rounded-full transition-all ${isListening ? 'bg-red-500 text-white animate-pulse scale-110 shadow-lg shadow-red-500/50' : 'bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}
+              className={`p-3 rounded-full transition-all ${isListening ? 'bg-red-500 text-white animate-pulse scale-110 shadow-lg shadow-red-500/50' : 'bg-slate-200 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}
             >
-              <Mic size={28} />
+              <Mic size={24} />
             </button>
             {isListening && (
               <motion.div 
@@ -1118,7 +1118,7 @@ function Converter({ category, setCategory, page, setPage, isDark, setIsDark }: 
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white shadow-2xl overflow-hidden min-h-[80vh]">
+    <div className="flex flex-col min-h-full w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white shadow-2xl min-h-[100dvh]">
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between px-4 py-4 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800">
         <div className="flex items-center gap-4">
