@@ -53,7 +53,18 @@ import {
   Info,
   Search,
   Star,
-  MoreVertical
+  MoreVertical,
+  Atom,
+  Timer,
+  Calendar,
+  Waves,
+  Cpu,
+  Shield,
+  Compass,
+  Zap as ZapIcon,
+  Hexagon,
+  Grid3X3,
+  Sparkle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import * as math from 'mathjs';
@@ -243,6 +254,28 @@ const CONVERTER_DATA = {
 };
 
 
+const ProLogo = ({ size = 64, className = "" }: { size?: number, className?: string }) => (
+  <div className={`relative flex items-center justify-center ${className}`}>
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      className="absolute inset-0"
+    >
+      <Hexagon size={size + 24} className="text-amber-500/20" strokeWidth={1} />
+    </motion.div>
+    <div className="relative z-10 bg-gradient-to-br from-amber-400 to-amber-600 p-4 rounded-2xl shadow-xl shadow-amber-500/30">
+      <Grid3X3 size={size} className="text-white" strokeWidth={2.5} />
+    </div>
+    <motion.div
+      animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+      transition={{ duration: 2, repeat: Infinity }}
+      className="absolute -top-1 -right-1"
+    >
+      <ZapIcon size={size / 2} className="text-amber-400 fill-amber-400 shadow-lg" />
+    </motion.div>
+  </div>
+);
+
 export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [isDark, setIsDark] = useState(false);
@@ -299,136 +332,118 @@ export default function App() {
     <div className={`${isDark ? 'dark' : ''} min-h-screen bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 font-sans transition-colors duration-300`}>
       <AnimatePresence>
         {showSplash && (
-          <motion.div 
+          <motion.div
             key="splash"
-            initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center text-white p-6 text-center"
+            transition={{ duration: 0.8 }}
+            className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-between py-20 px-8 overflow-hidden text-center"
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="mb-8 relative"
-            >
-              <div className="absolute inset-0 bg-yellow-500/20 blur-3xl rounded-full" />
-              <motion.div
-                animate={{ 
-                  textShadow: [
-                    "0 0 10px rgba(255, 215, 0, 0.2)",
-                    "0 0 20px rgba(255, 215, 0, 0.4)",
-                    "0 0 10px rgba(255, 215, 0, 0.2)"
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="text-6xl font-black tracking-widest text-[#FFD700] relative z-10"
-              >
-                ✦ NIRAJ ✦
-              </motion.div>
-            </motion.div>
-
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.1)_0%,transparent_70%)]" />
+            
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="space-y-4"
+              transition={{ duration: 1 }}
+              className="relative z-10 flex flex-col items-center"
             >
-              <h1 className="text-2xl font-bold tracking-tight text-white uppercase">
-                Scientific Calculator
-              </h1>
+              <div className="flex items-center gap-6 mb-4">
+                <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 10, 0] }} transition={{ duration: 3, repeat: Infinity }}>
+                  <Sparkle size={48} className="text-amber-500 fill-amber-500" />
+                </motion.div>
+                <h1 className="text-7xl font-black tracking-widest text-amber-500 uppercase drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                  NIRAJ
+                </h1>
+                <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}>
+                  <Sparkle size={48} className="text-amber-500 fill-amber-500" />
+                </motion.div>
+              </div>
+              <h2 className="text-xl font-medium tracking-[0.2em] text-white/90 uppercase mb-8">
+                SCIENTIFIC CALCULATOR
+              </h2>
               
-              <div className="flex items-center justify-center gap-2 text-zinc-400 text-sm font-medium">
-                <span>⚡ Smart</span>
-                <span className="text-zinc-600">•</span>
+              <div className="flex items-center gap-3 text-amber-500/80 text-sm font-bold uppercase tracking-widest">
+                <Zap size={16} className="fill-amber-500" />
+                <span>Smart</span>
+                <span className="text-white/20">•</span>
                 <span>Fast</span>
-                <span className="text-zinc-600">•</span>
-                <span>Online ⚡</span>
+                <span className="text-white/20">•</span>
+                <span>Online</span>
+                <Zap size={16} className="fill-amber-500" />
               </div>
             </motion.div>
 
-            <div className="mt-16 flex flex-col items-center gap-4">
-              <div className="flex gap-1">
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex gap-2 mb-2">
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                    className="w-1.5 h-1.5 bg-[#FFD700] rounded-full"
+                    className="w-2.5 h-2.5 bg-amber-500 rounded-full"
                   />
                 ))}
               </div>
-              <span className="text-zinc-500 text-xs tracking-widest uppercase">Loading...</span>
+              <p className="text-[10px] font-black text-amber-500/40 tracking-[0.4em] uppercase">LOADING...</p>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="absolute bottom-16 w-full flex flex-col items-center space-y-4"
-            >
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-bold">👨‍💻 Developed by</span>
-                <span className="text-2xl font-black bg-gradient-to-r from-[#FFD700] via-[#FFFACD] to-[#FFD700] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+            <div className="relative z-10 flex flex-col items-center gap-4">
+              <div className="text-center">
+                <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold mb-2 flex items-center justify-center gap-2">
+                  <span>👨‍💻</span> DEVELOPED BY
+                </p>
+                <h3 className="text-2xl font-black text-amber-500 uppercase tracking-tight">
                   Niraj Kumar Kannaujiya
-                </span>
+                </h3>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-zinc-900/50 rounded-full border border-zinc-800/50 backdrop-blur-sm">
-                  <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse shadow-[0_0_8px_#FFD700]" />
-                  <span className="text-sm font-bold text-zinc-200 tracking-wide">
-                    Queen’s College Student
-                  </span>
-                  <span className="text-zinc-600 mx-1 font-light">•</span>
-                  <span className="text-[#FFD700] font-mono">© 2026</span>
+              
+              <div className="px-6 py-2.5 bg-zinc-900/80 border border-white/5 rounded-full flex items-center gap-4 shadow-2xl">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                  <span className="text-[10px] font-black text-white/70 tracking-widest uppercase">Queen’s College Student</span>
                 </div>
+                <div className="h-3 w-px bg-white/10" />
+                <span className="text-[10px] font-black text-amber-500/60 uppercase tracking-widest">© 2026</span>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className={`w-full ${page === 'calculator' ? '' : 'max-w-md'} mx-auto min-h-screen flex flex-col relative`}>
-
-        {/* Header */}
+      <div className={`w-full ${page === 'calculator' || page === 'converter' ? 'h-screen overflow-hidden' : 'max-w-xl min-h-screen pb-32'} mx-auto flex flex-col relative`}>
+        {/* Modern Header */}
         {page !== 'calculator' && (
-          <header className="sticky top-0 z-30 bg-orange-500 text-white p-4 flex justify-between items-center shadow-md">
-            <div className="flex items-center gap-3">
-              {page !== 'home' && (
-                <button onClick={() => setPage('home')} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
-                  <ChevronLeft size={24} />
+          <header className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-300 ${isDark ? 'bg-zinc-950/80 border-zinc-800' : 'bg-white/80 border-slate-200'} p-4 flex justify-between items-center`}>
+            <div className="flex items-center gap-4">
+              {page !== 'home' ? (
+                <button onClick={() => setPage('home')} className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition-all active:scale-90">
+                  <ChevronLeft size={24} className="text-slate-600 dark:text-zinc-400" />
                 </button>
+              ) : (
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <ProLogo size={20} className="scale-75" />
+                </div>
               )}
               <div>
-                <h1 className="text-xl font-bold flex items-center gap-2">
-                  <CalcIcon size={24} className="bg-white/20 p-1 rounded-lg" />
-                  NIRAJ SCIENTIFIC CALCULATOR
+                <h1 className="text-sm font-black tracking-widest text-slate-800 dark:text-white uppercase leading-none">
+                  {page === 'home' ? 'NIRAJ SCIENTIFIC' : page.charAt(0).toUpperCase() + page.slice(1)}
                 </h1>
-                <div className="flex items-center gap-1 ml-9">
-                  <span className="w-1 h-1 bg-green-300 rounded-full" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest opacity-80">Offline Ready</span>
-                </div>
+                <p className="text-[9px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest mt-1">
+                  Scientific Suite v2.0
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {isOffline && (
-                <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-red-500 rounded-full text-[10px] font-bold uppercase animate-pulse">
-                  <WifiOff size={12} /> Offline
-                </div>
-              )}
-              <button 
-                onClick={() => setPage('history')}
-                className={`p-2 hover:bg-white/10 rounded-full transition-colors ${page === 'history' ? 'bg-white/20' : ''}`}
-                aria-label="View history"
-              >
-                <HistoryIcon size={20} />
-              </button>
               <button 
                 onClick={() => setIsDark(!isDark)}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                aria-label="Toggle theme"
+                className="p-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 rounded-xl hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
               >
                 {isDark ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button 
+                onClick={() => setPage('about')}
+                className="p-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 rounded-xl hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
+              >
+                <Info size={20} />
               </button>
             </div>
           </header>
@@ -523,7 +538,7 @@ export default function App() {
           )}
           {page === 'about' && (
             <motion.div key="about" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-              <AboutPage />
+              <AboutPage setPage={setPage} />
             </motion.div>
           )}
           {page === 'privacy' && (
@@ -549,48 +564,43 @@ export default function App() {
       </footer>
 
       {/* Navigation Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-slate-200 dark:border-zinc-800 flex flex-col shadow-lg z-40">
-        <div className="flex justify-around items-center h-16">
-          <button 
-            onClick={() => setPage('calculator')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${page === 'calculator' ? 'text-orange-500' : 'text-slate-400'}`}
-          >
-            <CalcIcon size={22} />
-            <span className="text-[10px] font-bold uppercase">Calc</span>
-          </button>
-          <button 
-            onClick={() => setPage('home')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${page === 'home' ? 'text-orange-500' : 'text-slate-400'}`}
-          >
-            <HomeIcon size={22} />
-            <span className="text-[10px] font-bold uppercase">Home</span>
-          </button>
-          <button 
-            onClick={() => setPage('math')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${page === 'math' ? 'text-orange-500' : 'text-slate-400'}`}
-          >
-            <BookOpen size={22} />
-            <span className="text-[10px] font-bold uppercase">Math</span>
-          </button>
-          <button 
-            onClick={() => setPage('converter')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${page === 'converter' ? 'text-orange-500' : 'text-slate-400'}`}
-          >
-            <RefreshCw size={22} />
-            <span className="text-[10px] font-bold uppercase">Conv</span>
-          </button>
-        </div>
-        <div className="h-6 flex items-center justify-center bg-slate-50 dark:bg-zinc-800/50 border-t border-slate-100 dark:border-zinc-800">
-          <button 
-            onClick={() => setPage('privacy')}
-            className="text-[9px] text-slate-400 hover:text-orange-500 transition-colors font-medium"
-          >
-            Privacy Policy (गोपनीयता नीति)
-          </button>
-        </div>
+      <footer className="fixed bottom-6 left-4 right-4 z-50">
+        <nav className="bg-white/80 dark:bg-zinc-900/90 backdrop-blur-xl border border-slate-200 dark:border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+          <div className="flex justify-around items-center h-18">
+            <NavBtn active={page === 'calculator'} onClick={() => setPage('calculator')} icon={<CalcIcon size={22} />} label="Calc" />
+            <NavBtn active={page === 'home'} onClick={() => setPage('home')} icon={<HomeIcon size={22} />} label="Home" />
+            <NavBtn active={page === 'math'} onClick={() => setPage('math')} icon={<BookOpen size={22} />} label="Math" />
+            <NavBtn active={page === 'converter'} onClick={() => setPage('converter')} icon={<RefreshCw size={22} />} label="Conv" />
+          </div>
+        </nav>
       </footer>
       </div>
     </div>
+  );
+}
+
+function NavBtn({ active, onClick, icon, label }: { active: boolean, onClick: () => void, icon: React.ReactNode, label: string }) {
+  return (
+    <button 
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center w-full h-full gap-1.5 transition-all relative ${active ? 'text-orange-500 scale-110' : 'text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300'}`}
+    >
+      {active && (
+        <motion.div 
+          layoutId="nav-bg"
+          className="absolute inset-0 bg-orange-500/5 dark:bg-orange-500/10"
+          transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+        />
+      )}
+      {icon}
+      <span className="text-[10px] font-black uppercase tracking-widest leading-none">{label}</span>
+      {active && (
+        <motion.div 
+          layoutId="nav-dot"
+          className="absolute bottom-1 w-1 h-1 bg-orange-500 rounded-full"
+        />
+      )}
+    </button>
   );
 }
 
@@ -599,50 +609,87 @@ function HomeGrid({ onOpenConv, onOpenCalc, onOpenTool }: {
   onOpenCalc: () => void,
   onOpenTool: (t: Page) => void
 }) {
-  const items = [
-    { id: 'calc', label: 'कैलकुलेटर', icon: <CalcIcon className="text-slate-600 dark:text-zinc-400" />, type: 'calc' },
-    { id: 'math', label: 'गणित (Math)', icon: <BookOpen className="text-indigo-600" />, type: 'tool' },
-    { id: 'currency', label: 'मुद्रा (Currency)', icon: <DollarSign className="text-green-600" />, type: 'tool' },
-    { id: 'length', label: 'लम्बाई', icon: <ArrowRightLeft className="text-blue-500" />, type: 'conv' },
-    { id: 'mass', label: 'तौल', icon: <Scale className="text-emerald-500" />, type: 'conv' },
-    { id: 'time', label: 'समय', icon: <Clock className="text-purple-500" />, type: 'conv' },
-    { id: 'area', label: 'क्षेत्रफल', icon: <Maximize className="text-orange-500" />, type: 'conv' },
-    { id: 'volume', label: 'आयतन', icon: <Box className="text-cyan-500" />, type: 'conv' },
-    { id: 'speed', label: 'गति', icon: <Zap className="text-yellow-500" />, type: 'conv' },
-    { id: 'temperature', label: 'तापमान', icon: <Thermometer className="text-red-500" />, type: 'conv' },
-    { id: 'formulas', label: 'सूत्र (Formulas)', icon: <Library className="text-amber-600" />, type: 'tool' },
-    { id: 'tracker', label: 'ट्रैकर (Tracker)', icon: <Navigation className="text-blue-600" />, type: 'tool' },
-    { id: 'graph', label: 'ग्राफ (Graph)', icon: <LineChart className="text-rose-600" />, type: 'tool' },
-    { id: 'symbols', label: 'चिह्न (Symbols)', icon: <Zap className="text-yellow-500" />, type: 'tool' },
-    { id: 'steps', label: 'स्टेप्स (Steps)', icon: <Footprints className="text-orange-600" />, type: 'tool' },
-    { id: 'random', label: 'रैंडम (Random)', icon: <Dices className="text-purple-600" />, type: 'tool' },
-    { id: 'notes', label: 'नोट्स (Notes)', icon: <StickyNote className="text-teal-600" />, type: 'tool' },
-    { id: 'about', label: 'अबाउट (About)', icon: <Info className="text-slate-600" />, type: 'tool' },
-    { id: 'gst', label: 'जीएसटी', icon: <Percent className="text-rose-500" />, type: 'tool' },
-    { id: 'discount', label: 'छूट', icon: <Tag className="text-green-500" />, type: 'tool' },
-    { id: 'bmi', label: 'बीएमआई', icon: <User className="text-teal-500" />, type: 'tool' },
-    { id: 'age', label: 'आयु', icon: <Clock className="text-blue-400" />, type: 'tool' },
-    { id: 'energy', label: 'ऊर्जा', icon: <Zap className="text-amber-500" />, type: 'conv' },
-    { id: 'data', label: 'डेटा', icon: <Database className="text-indigo-500" />, type: 'conv' },
+  const sections = [
+    {
+      title: "Smart Core",
+      subtitle: "Powerful utility processors",
+      items: [
+        { id: 'calc', label: 'Pro Calc', sub: 'Calculations', icon: <CalcIcon size={24} />, type: 'calc', color: 'bg-orange-500' },
+        { id: 'tracker', label: 'Live Track', sub: 'GPS Tracking', icon: <Navigation size={24} />, type: 'tool', color: 'bg-blue-600' },
+        { id: 'steps', label: 'Fitness', sub: 'Step Counter', icon: <Footprints size={24} />, type: 'tool', color: 'bg-emerald-600' },
+        { id: 'notes', label: 'Smart Notes', sub: 'Organization', icon: <StickyNote size={24} />, type: 'tool', color: 'bg-teal-500' },
+      ]
+    },
+    {
+      title: "Education & Finance",
+      subtitle: "Academic & Financial tools",
+      items: [
+        { id: 'math', label: 'Math Lab', sub: '1000+ Formulas', icon: <BookOpen size={24} />, type: 'tool', color: 'bg-violet-600' },
+        { id: 'formulas', label: 'Quick Reference', sub: 'Physics & Chem', icon: <Library size={24} />, type: 'tool', color: 'bg-amber-600' },
+        { id: 'gst', label: 'GST Calc', sub: 'Tax Utility', icon: <Percent size={24} />, type: 'tool', color: 'bg-emerald-600' },
+        { id: 'discount', label: 'Discount', sub: 'Price Helper', icon: <Tag size={24} />, type: 'tool', color: 'bg-pink-600' },
+      ]
+    },
+    {
+      title: "Essential Converters",
+      subtitle: "Real-time unit conversion",
+      items: [
+        { id: 'length', label: 'Length', sub: 'Units', icon: <ArrowRightLeft size={24} />, type: 'conv', color: 'bg-blue-500' },
+        { id: 'mass', label: 'Weight', sub: 'Mass', icon: <Scale size={24} />, type: 'conv', color: 'bg-emerald-500' },
+        { id: 'currency', label: 'Currency', sub: 'Global', icon: <DollarSign size={24} />, type: 'tool', color: 'bg-green-500' },
+        { id: 'time', label: 'Time', sub: 'Duration', icon: <Clock size={24} />, type: 'conv', color: 'bg-purple-500' },
+      ]
+    },
+    {
+      title: "Health & Misc",
+      subtitle: "Daily wellness & helpers",
+      items: [
+        { id: 'bmi', label: 'BMI Index', sub: 'Health Metric', icon: <User size={24} />, type: 'tool', color: 'bg-cyan-600' },
+        { id: 'age', label: 'Age Finder', sub: 'Date Utilities', icon: <Calendar size={24} />, type: 'tool', color: 'bg-indigo-600' },
+        { id: 'graph', label: 'Graph Plotter', sub: 'Visual Math', icon: <Activity size={24} />, type: 'tool', color: 'bg-amber-500' },
+        { id: 'random', label: 'Randomizer', sub: 'Dices & More', icon: <Dices size={24} />, type: 'tool', color: 'bg-rose-600' },
+      ]
+    }
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-3 pb-4">
-      {items.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => {
-            if (item.type === 'conv') onOpenConv(item.id as any);
-            else if (item.type === 'calc') onOpenCalc();
-            else onOpenTool(item.id as any);
-          }}
-          className="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-zinc-800 flex flex-col items-center gap-3 active:scale-95 transition-all hover:border-orange-200 dark:hover:border-orange-900/50"
-        >
-          <div className="p-2 bg-slate-50 dark:bg-zinc-800 rounded-lg">
-            {item.icon}
+    <div className="space-y-12 pb-12">
+      {sections.map((section, sIdx) => (
+        <div key={section.title} className="space-y-6">
+          <div className="px-1">
+            <h1 className="text-2xl font-black text-slate-800 dark:text-zinc-100 tracking-tighter leading-none mb-1">{section.title}</h1>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500 leading-none">Smart Collection</p>
           </div>
-          <span className="text-[10px] sm:text-xs font-bold text-slate-600 dark:text-zinc-300 text-center">{item.label}</span>
-        </button>
+          <div className="grid grid-cols-2 gap-4">
+            {section.items.map((item, idx) => (
+              <motion.button
+                key={item.id}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: (sIdx * 4 + idx) * 0.05 }}
+                onClick={() => {
+                  if (item.type === 'calc') onOpenCalc();
+                  else if (item.type === 'conv') onOpenConv(item.id as any);
+                  else onOpenTool(item.id as Page);
+                }}
+                className="relative group aspect-square rounded-[2.5rem] bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-[0_8px_30px_rgba(0,0,0,0.02)] transition-all flex flex-col items-center justify-center gap-3 p-4 hover:border-amber-500/30"
+              >
+                <div className={`p-4 rounded-3xl ${item.color} text-white shadow-xl shadow-amber-500/10 group-hover:scale-110 transition-transform duration-500`}>
+                  {item.icon}
+                </div>
+                <div className="text-center">
+                  <h4 className="font-black text-[11px] text-slate-800 dark:text-zinc-100 uppercase tracking-tighter leading-tight group-hover:text-amber-500 transition-colors">
+                    {item.label}
+                  </h4>
+                  <p className="text-[8px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest mt-1 opacity-40">
+                    {item.sub}
+                  </p>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   );
@@ -782,7 +829,7 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
         .toLowerCase()
         .replace(/प्लस|जोड़|plus|add/g, '+')
         .replace(/माइनस|घटाव|minus|subtract/g, '−')
-        .replace(/गुणा|इनटू|गुना|times|multiplied by|multiply|multiple|into|x|multiplication/g, '×')
+        .replace(/गुणा|इनटू|गुना|गुने|times|multiplied by|multiply|multiple|into|x|multiplication/g, '×')
         .replace(/भाग|डिवाइड|divided by|divide|division/g, '÷')
         .replace(/पॉइंट|बिंदु|point|decimal/g, '.')
         .replace(/बराबर|इक्वल|equal|equals/g, '=')
@@ -838,47 +885,37 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
   ];
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white shadow-2xl overflow-hidden">
-      {/* Top Navigation Bar */}
-      <div className="flex items-center justify-between px-4 py-4 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800">
+    <div className="flex flex-col flex-1 h-[100dvh] w-full bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white relative overflow-hidden">
+      {/* Modern Consistent Header */}
+      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-300 ${isDark ? 'bg-zinc-950/80 border-zinc-800' : 'bg-white/80 border-slate-200'} p-4 flex justify-between items-center`}>
         <div className="flex items-center gap-4">
-          <button onClick={() => setPage('home')} className="p-1 text-slate-400 hover:text-slate-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors">
-            <ChevronLeft size={24} />
+          <button onClick={() => setPage('home')} className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-xl transition-all active:scale-90">
+            <ChevronLeft size={24} className="text-slate-600 dark:text-zinc-400" />
           </button>
-          <div className="flex items-center gap-6">
-            <button 
-              onClick={() => setPage('calculator')}
-              className={`text-sm font-bold tracking-wider uppercase transition-colors ${page === 'calculator' ? 'text-orange-500' : 'text-slate-400 hover:text-slate-600 dark:text-zinc-500 dark:hover:text-zinc-300'}`}
-            >
-              Calculator
-            </button>
-            <button 
-              onClick={() => setPage('converter')}
-              className={`text-sm font-bold tracking-wider uppercase transition-colors ${page === 'converter' ? 'text-orange-500' : 'text-slate-400 hover:text-slate-600 dark:text-zinc-500 dark:hover:text-zinc-300'}`}
-            >
-              Converter
-            </button>
+          <div>
+            <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-white uppercase leading-none">Smart Calc</h1>
+            <div className="flex items-center gap-1.5 mt-1">
+               <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+               <span className="text-[9px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest leading-none">Calculated Live</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-1 relative">
           <button 
             onClick={() => setIsDark(!isDark)}
             className="p-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 rounded-xl hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
-            title="Toggle Theme"
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button 
             onClick={() => setPage('history')}
             className="p-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 rounded-xl hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
-            title="History"
           >
             <HistoryIcon size={20} />
           </button>
           <button 
             onClick={() => setShowMore(!showMore)}
             className="p-2.5 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 rounded-xl hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all active:scale-90"
-            title="More Options"
           >
             <MoreVertical size={20} />
           </button>
@@ -886,31 +923,33 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
           {showMore && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowMore(false)} />
-              <div className="absolute top-14 right-0 w-56 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl shadow-2xl z-50 py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                <div className="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-zinc-800 mb-1">
-                  Options (विकल्प)
+              <div className="absolute top-14 right-0 w-64 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-[2rem] shadow-2xl z-50 p-2 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 dark:border-zinc-800 mb-1">
+                  Calculation Engine
                 </div>
                 <button 
                   onClick={() => { setIsScientific(!isScientific); setShowMore(false); }}
-                  className="w-full px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800 flex items-center gap-3 transition-colors"
+                  className="w-full px-4 py-4 text-left text-sm font-black text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800 flex items-center justify-between transition-colors rounded-2xl"
                 >
-                  <div className="p-1.5 bg-orange-100 dark:bg-orange-500/20 rounded-lg">
-                    <Layers size={16} className="text-orange-500" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-orange-500/10 rounded-xl">
+                      <Layers size={18} className="text-orange-500" />
+                    </div>
+                    <span>Scientific Mode</span>
                   </div>
-                  {isScientific ? 'Hide Scientific' : 'Show Scientific'}
+                  <div className={`w-10 h-6 rounded-full p-1 transition-colors ${isScientific ? 'bg-orange-500' : 'bg-slate-200 dark:bg-zinc-800'}`}>
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${isScientific ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </div>
                 </button>
                 <button 
                   onClick={() => { setHistory([]); setShowMore(false); }}
-                  className="w-full px-4 py-3 text-left text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 flex items-center gap-3 transition-colors"
+                  className="w-full px-4 py-4 text-left text-sm font-black text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 flex items-center gap-3 transition-colors rounded-2xl"
                 >
-                  <div className="p-1.5 bg-red-100 dark:bg-red-500/20 rounded-lg">
-                    <Trash2 size={16} className="text-red-500" />
+                  <div className="p-2 bg-red-500/10 rounded-xl">
+                    <Trash2 size={18} className="text-red-500" />
                   </div>
-                  Clear History
+                  Clear All History
                 </button>
-                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-zinc-800 px-4 pb-2">
-                  <div className="text-[10px] text-slate-400 text-center">NIRAJ Calculator v2.0</div>
-                </div>
               </div>
             </>
           )}
@@ -918,7 +957,7 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
       </div>
 
       {/* Display Area */}
-      <div className="flex-1 flex flex-col justify-end p-6 text-right min-h-[25vh]">
+      <div className="flex-1 flex flex-col justify-end p-4 sm:p-6 text-right min-h-[20vh] sm:min-h-[25vh]">
         <div className="flex justify-between items-start mb-4">
           <div className="relative">
             <button 
@@ -937,28 +976,29 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
               </motion.div>
             )}
           </div>
-          <div className="flex flex-col items-end max-w-[80%]">
-            <div className="text-slate-400 dark:text-zinc-500 text-2xl font-medium overflow-hidden whitespace-nowrap mb-2 opacity-70">
+          <div className="flex flex-col items-end max-w-full overflow-hidden">
+            <div className="text-slate-400 dark:text-zinc-500 text-lg sm:text-2xl font-medium overflow-x-auto whitespace-nowrap mb-1 opacity-70 w-full text-right scrollbar-hide">
               {lastExpression ? lastExpression + ' =' : ' '}
             </div>
             {realTimeResult && expression && (
-              <div className="text-orange-500/60 text-xl font-medium animate-in fade-in slide-in-from-right-2">
+              <div className="text-orange-500/60 text-base sm:text-xl font-medium animate-in fade-in slide-in-from-right-2 overflow-x-auto whitespace-nowrap w-full text-right scrollbar-hide">
                 = {realTimeResult}
               </div>
             )}
           </div>
         </div>
-        <div className="relative flex items-center justify-end overflow-hidden">
-          <div className={`font-light text-slate-900 dark:text-white overflow-hidden whitespace-nowrap tracking-tighter transition-all duration-200 ${
+        <div className="relative flex items-center justify-end w-full overflow-hidden">
+          <div className={`w-full font-light text-slate-900 dark:text-white overflow-x-auto overflow-y-hidden whitespace-nowrap tracking-tighter transition-all duration-200 text-right scrollbar-hide flex items-center justify-end ${
+            (expression || result || '0').length > 15 ? 'text-3xl' :
             (expression || result || '0').length > 10 ? 'text-4xl' : 
             (expression || result || '0').length > 7 ? 'text-5xl' : 'text-7xl'
           }`}>
-            {expression || result || '0'}
+            <span>{expression || result || '0'}</span>
           </div>
           <motion.div 
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 0.8, repeat: Infinity }}
-            className="w-1 h-14 bg-orange-500 ml-1 rounded-full flex-shrink-0"
+            className="w-1 h-12 bg-orange-500 ml-1 rounded-full flex-shrink-0"
           />
         </div>
       </div>
@@ -976,7 +1016,7 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
                 <button
                   key={btn.label}
                   onClick={() => handlePress(btn.label)}
-                  className="h-10 rounded-xl text-xs font-bold bg-slate-50 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 active:scale-95 transition-all border border-slate-200/50 dark:border-zinc-700/50 hover:bg-slate-100 dark:hover:bg-zinc-700"
+                  className="h-10 sm:h-12 rounded-xl sm:rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest bg-slate-50 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400 active:scale-90 transition-all border border-slate-200/50 dark:border-zinc-700/50"
                 >
                   {btn.label}
                 </button>
@@ -994,7 +1034,7 @@ function Calculator({ history, setHistory, page, setPage, isDark, setIsDark }: {
                 else if (btn.type === 'sci_toggle') setIsScientific(!isScientific);
                 else handlePress(btn.label);
               }}
-              className={`h-16 sm:h-20 rounded-2xl text-2xl font-medium transition-all active:scale-90 flex items-center justify-center
+              className={`h-16 sm:h-20 rounded-2xl sm:rounded-3xl text-xl sm:text-2xl font-black transition-all active:scale-90 flex items-center justify-center
                 ${btn.type === 'op' || btn.type === 'clear' || btn.type === 'del' || btn.type === 'sci_toggle' ? 'bg-slate-100 dark:bg-zinc-800 text-orange-500' : 
                   btn.type === 'calc' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 
                   'bg-white dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 border border-slate-100 dark:border-zinc-700 shadow-sm'}`}
@@ -2160,7 +2200,7 @@ function PrivacyPolicy() {
       <section className="space-y-2">
         <h3 className="text-lg font-bold text-slate-800 dark:text-zinc-200">4. Contact Us</h3>
         <p className="text-sm leading-relaxed">
-          If you have any questions about this Privacy Policy, please contact us at: <strong>nirajkannaujiya224@gmail.com</strong>
+          If you have any questions about this Privacy Policy, please contact us at: <strong>nirajkannaujiya920@gmail.com</strong>
         </p>
       </section>
 
@@ -2959,6 +2999,14 @@ function LiveTracker() {
     return R * c;
   };
 
+  // Improved coordinate filtering/stabilization
+  const isBetterPosition = (newCoords: GeolocationCoordinates, currentCoords: GeolocationCoordinates | null) => {
+    if (!currentCoords) return true;
+    const timeDiff = 1000; // ms
+    const accuracyThreshold = 50; // meters
+    return newCoords.accuracy < accuracyThreshold || newCoords.accuracy <= currentCoords.accuracy;
+  };
+
   const startTracking = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -3064,122 +3112,69 @@ function LiveTracker() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-blue-600 text-white p-6 rounded-3xl shadow-xl relative overflow-hidden">
-        <div className="relative z-10">
-          <h2 className="text-xl font-bold flex items-center gap-2 mb-1">
-            <Navigation size={24} /> लाइव ट्रैकर (Live Tracker)
-          </h2>
-          <p className="text-xs text-blue-100 opacity-80">दूरी, गति और समय की वास्तविक ट्रैकिंग</p>
+    <div className="space-y-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-white dark:bg-zinc-900 overflow-hidden rounded-[2.5rem] border border-slate-100 dark:border-zinc-800 shadow-xl p-8">
+        <div className="flex flex-col items-center text-center space-y-4 mb-8">
+          <div className="p-4 bg-amber-500 rounded-[2rem] shadow-xl shadow-amber-500/20 mb-2">
+            <Navigation className="text-white" size={32} />
+          </div>
+          <div>
+            <span className="text-5xl font-black tracking-tighter text-slate-800 dark:text-zinc-100">{formatDistance(stats.distance)}</span>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mt-2">Overall Displacement</p>
+          </div>
         </div>
-        <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center col-span-2">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center justify-center gap-2">
-            वर्तमान गति (Current Speed)
-            {isTracking && <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />}
+        <div className="grid grid-cols-2 gap-4 pb-8 border-b border-slate-100 dark:border-zinc-800">
+          <div className="space-y-1">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Time Elapsed</p>
+            <p className="text-2xl font-black text-slate-800 dark:text-zinc-100 tracking-tighter">{formatTime(stats.time)}</p>
           </div>
-          <div className={`text-4xl font-black transition-colors ${isTracking ? 'text-blue-600' : 'text-slate-300'}`}>
-            {isTracking && !lastPosRef.current ? (
-              <span className="text-sm animate-pulse text-orange-500">GPS सिग्नल खोज रहे हैं... (Searching...)</span>
-            ) : isTracking && stats.currentSpeed <= 0.5 ? (
-              <span className="text-sm text-slate-400">विराम अवस्था (Stationary)</span>
-            ) : (
-              <>
-                {stats.currentSpeed.toFixed(1)} <span className="text-xs">km/h</span>
-              </>
+          <div className="space-y-1 text-right">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Active Speed</p>
+            <p className="text-2xl font-black text-amber-500 tracking-tighter">
+              {isTracking && !lastPosRef.current ? '--' : stats.currentSpeed.toFixed(1)} <span className="text-[10px]">km/h</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="py-6 grid grid-cols-2 gap-8">
+          <div className="space-y-1">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Average Speed</p>
+            <p className="text-lg font-bold text-slate-700 dark:text-zinc-300">{stats.avgSpeed.toFixed(1)} <span className="text-xs">km/h</span></p>
+          </div>
+          <div className="space-y-1 text-right">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Maximum Speed</p>
+            <p className="text-lg font-bold text-slate-700 dark:text-zinc-300">{stats.maxSpeed.toFixed(1)} <span className="text-xs">km/h</span></p>
+          </div>
+        </div>
+
+        {isTracking && (
+          <div className="pt-6 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]" />
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                {!lastPosRef.current ? 'GPS Connecting...' : 'Real-time Signal Active'}
+              </span>
+            </div>
+            {lastPosRef.current && (
+              <span className="text-[10px] font-bold text-slate-500">±{(lastPosRef.current as any).accuracy.toFixed(0)}m</span>
             )}
-          </div>
-        </div>
-        <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">कुल दूरी (Distance)</div>
-          <div className="text-2xl font-black text-blue-600">{formatDistance(stats.distance)}</div>
-        </div>
-        <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">कुल समय (Time)</div>
-          <div className="text-2xl font-black text-blue-600">{formatTime(stats.time)}</div>
-        </div>
-        <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">औसत गति (Avg Speed)</div>
-          <div className="text-2xl font-black text-blue-600">{stats.avgSpeed.toFixed(1)} <span className="text-xs">km/h</span></div>
-        </div>
-        <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm text-center">
-          <div className="text-[10px] font-bold text-slate-400 uppercase mb-1">अधिकतम गति (Max Speed)</div>
-          <div className="text-2xl font-black text-blue-600">{stats.maxSpeed.toFixed(1)} <span className="text-xs">km/h</span></div>
-        </div>
-        {isTracking && lastPosRef.current && (
-          <div className="bg-slate-50 dark:bg-zinc-800/50 p-3 rounded-xl border border-slate-100 dark:border-zinc-800 text-center col-span-2 flex justify-around items-center">
-            <div className="flex flex-col">
-              <span className="text-[8px] font-bold text-slate-400 uppercase">सटीकता (Accuracy)</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">±{(lastPosRef.current as any).accuracy.toFixed(0)}m</span>
-            </div>
-            <div className="w-px h-6 bg-slate-200 dark:bg-zinc-700" />
-            <div className="flex flex-col">
-              <span className="text-[8px] font-bold text-slate-400 uppercase">ऊंचाई (Altitude)</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">
-                {(lastPosRef.current as any).altitude ? (lastPosRef.current as any).altitude.toFixed(0) + 'm' : '--'}
-              </span>
-            </div>
-            <div className="w-px h-6 bg-slate-200 dark:bg-zinc-700" />
-            <div className="flex flex-col">
-              <span className="text-[8px] font-bold text-slate-400 uppercase">दिशा (Heading)</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-zinc-300">
-                {(lastPosRef.current as any).heading ? (lastPosRef.current as any).heading.toFixed(0) + '°' : '--'}
-              </span>
-            </div>
           </div>
         )}
       </div>
 
-      <div className="flex justify-center pt-4 flex-col items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full border border-slate-200 dark:border-zinc-700">
-            <span className={`w-2 h-2 rounded-full ${isTracking ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
-            <span className="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">
-              {isTracking ? 'GPS सक्रिय है (Active)' : 'GPS बंद है (Inactive)'}
-            </span>
-            {isTracking && lastPosRef.current && (
-              <div className="flex items-center gap-1 ml-2 border-l border-slate-300 dark:border-zinc-700 pl-2">
-                <span className="text-[8px] font-bold text-slate-400">सिग्नल:</span>
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4].map(i => (
-                    <div 
-                      key={i} 
-                      className={`w-1 rounded-t-sm ${
-                        (lastPosRef.current as any).accuracy < (200 / i) 
-                          ? 'bg-green-500' 
-                          : 'bg-slate-200 dark:bg-zinc-700'
-                      }`} 
-                      style={{ height: `${i * 3}px` }}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        {!isTracking ? (
-          <button 
-            onClick={startTracking}
-            className="flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/30 active:scale-95 transition-all w-full sm:w-auto justify-center"
-          >
-            <Play size={20} fill="currentColor" /> ट्रैकिंग शुरू करें (Start)
-          </button>
-        ) : (
-          <button 
-            onClick={stopTracking}
-            className="flex items-center gap-3 bg-red-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-red-500/30 active:scale-95 transition-all w-full sm:w-auto justify-center"
-          >
-            <Square size={20} fill="currentColor" /> ट्रैकिंग रोकें (Stop)
-          </button>
-        )}
+      <div className="px-2">
+        <button
+          onClick={isTracking ? stopTracking : startTracking}
+          className={`w-full py-6 rounded-[2rem] font-black text-xl tracking-[0.1em] uppercase transition-all shadow-xl active:scale-95 ${
+            isTracking 
+              ? 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100' 
+              : 'bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-amber-500/30'
+          }`}
+        >
+          {isTracking ? 'End Tracking' : 'Initiate Session'}
+        </button>
       </div>
-
-      {isTracking && (
-        <div className="flex items-center justify-center gap-2 text-blue-500 font-bold text-xs animate-pulse">
-          <div className="w-2 h-2 bg-blue-500 rounded-full" /> GPS सक्रिय है...
-        </div>
-      )}
     </div>
   );
 }
@@ -3634,32 +3629,38 @@ function NotesManager() {
   );
 }
 
-function AboutPage() {
+function AboutPage({ setPage }: { setPage: (p: Page) => void }) {
   return (
-    <div className="space-y-6">
-      <div className="bg-slate-800 text-white p-8 rounded-3xl shadow-xl text-center relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="bg-white/10 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-            <CalcIcon size={40} />
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-zinc-950 text-white p-12 rounded-[3rem] shadow-2xl text-center relative overflow-hidden group">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.1)_0%,transparent_70%)]" />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="flex items-center gap-4 mb-6">
+            <Sparkle className="text-amber-500 fill-amber-500" size={24} />
+            <h2 className="text-3xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_10px_rgba(245,158,11,0.3)]">NIRAJ</h2>
+            <Sparkle className="text-amber-500 fill-amber-500" size={24} />
           </div>
-          <h2 className="text-2xl font-black mb-1">NIRAJ Scientific Calculator</h2>
-          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Version 2.0.0 (Pro)</p>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-900 border border-white/5 rounded-full mb-6">
+            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-500">Professional Suite</span>
+          </div>
         </div>
-        <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
+        <Hexagon className="absolute -right-16 -bottom-16 w-64 h-64 opacity-5 rotate-12 group-hover:rotate-0 transition-transform duration-700 text-amber-500" />
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-slate-100 dark:border-zinc-800 shadow-sm space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Developer (विकासकर्ता)</h3>
-          <div className="p-5 bg-slate-50 dark:bg-zinc-800/50 rounded-3xl border border-slate-100 dark:border-zinc-800 flex items-center gap-5">
-            <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-orange-500/20">NK</div>
-            <div>
-              <div className="font-black text-slate-800 dark:text-zinc-100 text-xl tracking-tight">Niraj Kumar Kannaujiya</div>
-              <div className="inline-flex items-center gap-2 mt-1 px-3 py-0.5 bg-orange-100 dark:bg-orange-500/20 rounded-full">
-                <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase">Queen’s College Student</span>
-              </div>
-            </div>
+      <div className="space-y-10 group">
+        <div className="space-y-4 text-center">
+          <div className="inline-block p-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-600">
+             <div className="px-6 py-2 bg-zinc-900 rounded-full">
+               <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.5em]">Developed By</span>
+             </div>
+          </div>
+          <h3 className="text-3xl font-black text-slate-800 dark:text-zinc-100 tracking-tight uppercase">
+            Niraj Kumar Kannaujiya
+          </h3>
+          <div className="flex items-center justify-center gap-3 text-slate-400 dark:text-zinc-500 text-[10px] font-black uppercase tracking-widest">
+            <span>Queen’s College Student</span>
+            <span className="text-amber-500">•</span>
+            <span>© 2026</span>
           </div>
         </div>
 
@@ -3683,8 +3684,8 @@ function AboutPage() {
 
         <div className="pt-4 text-center">
           <button 
-            onClick={() => window.open('/privacy.html', '_blank')}
-            className="text-[10px] font-bold text-blue-500 uppercase tracking-widest hover:underline"
+            onClick={() => setPage('privacy')}
+            className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] hover:text-blue-600 transition-colors bg-blue-50 dark:bg-blue-500/10 px-6 py-2 rounded-full border border-blue-100 dark:border-blue-500/20"
           >
             Privacy Policy (गोपनीयता नीति)
           </button>
